@@ -1,24 +1,12 @@
-# README
+# GROCERIES
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Fallos por ahora:
 
-Things you may want to cover:
+### Test modelo
+	- Validar long. y presencia de los lados. No está indicado en el test, lo comprueba por que lo comprueba el modelo
 
-* Ruby version
+### Test controlador
+	- UPDATE: El body en caso de 422 está formado por un JSON a partir del objeto errors de ActiveModel
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Pundit
+	- Devolver 204: Está puesto a piñon que devuelva el body vacío y el stado 204.

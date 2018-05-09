@@ -8,6 +8,11 @@ RSpec.describe User, type: :model do
   context 'when user is valid' do
     it 'is valid' do
       expect(@user).to be_valid
+
+      #TODO, validar longitud!
+
+      should validate_presence_of(:name)
+      is_expected.to validate_presence_of(:name)
     end
   end
 
