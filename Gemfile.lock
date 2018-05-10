@@ -38,8 +38,6 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.5.2)
-      public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
     bcrypt (3.1.11)
     bcrypt (3.1.11-java)
@@ -49,8 +47,6 @@ GEM
     byebug (10.0.2)
     concurrent-ruby (1.0.5)
     concurrent-ruby (1.0.5-java)
-    crack (0.4.3)
-      safe_yaml (~> 1.0.0)
     crass (1.0.4)
     database_cleaner (1.7.0)
     diff-lcs (1.3)
@@ -66,7 +62,6 @@ GEM
     ffi (1.9.23-x86-mingw32)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    hashdiff (0.3.7)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jsonapi-deserializable (0.2.0)
@@ -103,7 +98,6 @@ GEM
       mini_portile2 (~> 2.3.0)
     nokogiri (1.8.2-x86-mingw32)
       mini_portile2 (~> 2.3.0)
-    public_suffix (3.0.2)
     puma (3.11.4)
     puma (3.11.4-java)
     pundit (1.1.0)
@@ -144,10 +138,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    rspec (3.7.0)
-      rspec-core (~> 3.7.0)
-      rspec-expectations (~> 3.7.0)
-      rspec-mocks (~> 3.7.0)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
@@ -164,13 +154,8 @@ GEM
       rspec-expectations (~> 3.7.0)
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
-    rspec-rerun (1.1.0)
-      rspec (~> 3.0)
     rspec-support (3.7.1)
     ruby_dep (1.5.0)
-    safe_yaml (1.0.4)
-    shoulda-matchers (3.1.2)
-      activesupport (>= 4.0.0)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -196,10 +181,6 @@ GEM
       tzinfo (>= 1.0.0)
     warden (1.2.7)
       rack (>= 1.0)
-    webmock (3.4.1)
-      addressable (>= 2.3.6)
-      crack (>= 0.3.2)
-      hashdiff
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-driver (0.6.5-java)
@@ -225,13 +206,10 @@ DEPENDENCIES
   rails (~> 5.1.6)
   rails_jwt_auth
   rspec-rails
-  rspec-rerun
-  shoulda-matchers
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3
   tzinfo-data
-  webmock
 
 BUNDLED WITH
    1.16.1

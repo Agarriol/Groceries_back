@@ -8,18 +8,14 @@ RSpec.describe User, type: :model do
   context 'when user is valid' do
     it 'is valid' do
       expect(@user).to be_valid
-
-      #TODO, validar longitud!
-
-      should validate_presence_of(:name)
-      is_expected.to validate_presence_of(:name)
     end
   end
 
   context 'when name is not valid' do
     it 'name very long' do
+      @user.name = 'asdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñ'
       expect(@user).to be_valid
-      @user.name = 'asdfghjklñ asdfghjklñ asdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñ'
+      @user.name = 'asdfghjklñ asdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñ'
       expect(@user).not_to be_valid
     end
     it 'name empty' do

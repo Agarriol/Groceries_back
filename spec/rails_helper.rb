@@ -9,7 +9,7 @@ require 'rspec/rails'
 require 'rails_jwt_auth/spec/helpers'
 require 'database_cleaner'
 require 'factory_bot_rails'
-require 'shoulda/matchers'
+# require 'shoulda/matchers'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -30,7 +30,7 @@ require 'shoulda/matchers'
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
-
+=begin
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     # Choose a test framework:
@@ -40,7 +40,7 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
-
+=end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

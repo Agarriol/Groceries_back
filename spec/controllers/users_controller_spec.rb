@@ -82,7 +82,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'UPDATE #update' do
     let(:attributes) { {name: 'unnombre'} }
-    let(:bad_attributes) { {name: ''} }
+    let(:bad_attributes) { {email: ''} }
 
     context 'when user is logged and have licence' do
       before do
@@ -158,8 +158,9 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it 'response ActiveModel error type' do
-        @user2.reload
-        expect(@data).to eq @user2.errors
+        # No puede ser una condición genérica, 
+        # ya que el test es como un cliente que llama a la api
+        expect(@data).to eq({'email' => [{'error' => 'blank'}]})
       end
     end
   end
