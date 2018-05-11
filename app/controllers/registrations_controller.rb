@@ -8,6 +8,6 @@ class RegistrationsController < RailsJwtAuth::RegistrationsController
 
   # Only allow a trusted parameter "white list" through.
   def user_create_params
-    params.require(:user).permit(:name, :email, :password)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 end

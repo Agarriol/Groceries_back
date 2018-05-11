@@ -18,10 +18,19 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     authorize @user
-    if @user.update(user_params)
-      render json: nil, status: '204'
+
+    if update_params[:password]
+      if current_user.update_with_password(update_params)
+        render json: nil, status: '204'
+      else
+        render json: current_user.errors.details, status: :unprocessable_entity
+      end
     else
-      render json: @user.errors.details, status: :unprocessable_entity
+      if @user.update_attributes(update_params)
+        render json: nil, status: '204'
+      else
+        render json: @user.errors.details, status: :unprocessable_entity
+      end
     end
   end
 
@@ -35,5 +44,9 @@ class UsersController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def user_params
     params.require(:user).permit(:name, :email, :password_digest, :auth_tokens)
+  end
+
+  def update_params
+    params.require(:user).permit(:name, :email, :current_password, :password, :password_confirmation)
   end
 end
