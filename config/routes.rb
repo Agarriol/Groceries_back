@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :lists
   resources :users
   resources :invitations, controller: 'rails_jwt_auth/invitations', only: [:create, :update]
   resource :password, controller: 'rails_jwt_auth/passwords', only: [:create, :update]

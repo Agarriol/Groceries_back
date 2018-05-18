@@ -9,6 +9,17 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe 'GET #index' do
+    context 'when user is not logged' do
+      before do
+        sign_out
+        get :index
+      end
+
+      it 'returns 401 Http status code' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
     context 'when user is logged' do
       before do
         sign_in @user
@@ -31,7 +42,7 @@ RSpec.describe UsersController, type: :controller do
                                             'email',
                                             'created_at',
                                             'updated_at')
-      end
+                                            require 'rails_helper'  end
     end
   end
 
@@ -160,7 +171,7 @@ RSpec.describe UsersController, type: :controller do
       it 'response ActiveModel error type' do
         # No puede ser una condición genérica, 
         # ya que el test es como un cliente que llama a la api
-        expect(@data).to eq({'email' => [{'error' => 'blank'}]})
+        expect(@data).to eq({"email"=>[{"error"=>"blank"}, {"error"=>"invalid", "value"=>""}]})
       end
     end
   end

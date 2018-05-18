@@ -24,9 +24,13 @@ gem 'puma', '~> 3.7'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
+
 gem 'jsonapi-rails'
 gem 'pundit'
 gem 'rails_jwt_auth'
+#Para la paginación
+gem 'kaminari'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -40,9 +44,14 @@ group :development do
 end
 
 group :test do
+  #Limpia la base de datos de test
   gem 'database_cleaner'
+  # Permite crear objetos en los test
   gem 'factory_bot_rails'
-  gem 'rspec-rails'
+  # Permite hacer pruebas
+  gem 'rspec-rails', '~> 3.7'
+  # Generar strings, nombres, cales...
+  gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
   # gem 'shoulda-matchers'
 end
 
