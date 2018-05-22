@@ -10,7 +10,7 @@ class ListPolicy < ApplicationPolicy
     @permit = @user.id == @list.user_id
   end
 
-  def delete?
+  def destroy?
     @permit = @user.id == @list.user_id
   end
 

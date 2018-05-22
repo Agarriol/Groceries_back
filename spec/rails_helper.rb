@@ -53,6 +53,7 @@ RSpec.configure do |config|
   # Test helpers
   config.include ActiveModel::Validations
   config.include FactoryBot::Syntax::Methods
+  config.include Warden::Test::Helpers
   # config.include ControllerHelpers, type: :controller
   config.include RailsJwtAuth::Spec::Helpers, type: :controller
 

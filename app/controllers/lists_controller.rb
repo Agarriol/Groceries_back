@@ -14,7 +14,13 @@ class ListsController < ApplicationController
                    .page(@page[:number] || 1)
                    .per(@page[:size] || 10)
 
-    render json: @lists
+    render json: {'data' => @lists,
+                  'meta' => {
+                    'current_page' => @lists.current_page,
+                    'total_pages' => @lists.total_pages,
+                    'page_size' => @lists.size,
+                    'total_elements' => @lists.total_count
+                  }}
   end
 
   # GET /lists/1
@@ -38,7 +44,8 @@ class ListsController < ApplicationController
   def update
     authorize @list
     if @list.update(list_params)
-      render json: @list
+      # render json: nil, status: '204'
+      head '204'
     else
       render json: @list.errors, status: :unprocessable_entity
     end

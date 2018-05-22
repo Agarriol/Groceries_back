@@ -11,17 +11,25 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'when name is not valid' do
-    it 'name very long' do
-      @user.name = 'asdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñ'
-      expect(@user).to be_valid
-      @user.name = 'asdfghjklñ asdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñ'
-      expect(@user).not_to be_valid
+  describe 'relations' do
+    it 'list - user' do
+      expect(@user).to respond_to(:lists)
     end
-    it 'name empty' do
-      expect(@user).to be_valid
-      @user.name = nil
-      expect(@user).not_to be_valid
+  end
+
+  describe 'Validations' do
+    context 'when name is not valid' do
+      it 'name very long' do
+        @user.name = 'asdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñ'
+        expect(@user).to be_valid
+        @user.name = 'asdfghjklñ asdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñasdfghjklñ'
+        expect(@user).not_to be_valid
+      end
+      it 'name empty' do
+        expect(@user).to be_valid
+        @user.name = nil
+        expect(@user).not_to be_valid
+      end
     end
   end
 end
