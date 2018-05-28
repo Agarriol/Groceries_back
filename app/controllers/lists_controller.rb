@@ -4,7 +4,7 @@ class ListsController < ApplicationController
 
   # GET /lists
   def index
-    @lists = List.all
+    @lists = List.all.select('id', 'title', 'description','user_id', 'created_at')
 
     filter if params[:filter] # TODO, ¿por qué no defined?()
     orderly
@@ -25,11 +25,14 @@ class ListsController < ApplicationController
 
   # GET /lists/1
   def show
-    render json: @list
+    @list_show = List.select('id', 'title', 'description', 'user_id', 'created_at').find(params[:id])
+
+    render json: @list_show
   end
 
   # POST /lists
   def create
+    # TODO, devolver solo los datos indicados
     @list = List.new(list_params)
     @list.user = current_user
 
@@ -44,7 +47,6 @@ class ListsController < ApplicationController
   def update
     authorize @list
     if @list.update(list_params)
-      # render json: nil, status: '204'
       head '204'
     else
       render json: @list.errors, status: :unprocessable_entity

@@ -49,18 +49,13 @@ RSpec.describe ListsController, type: :controller do
           expect(data['data'].first.keys).to include('id',
                                                      'title',
                                                      'description',
-                                                     'state',
-                                                     'user_id',
-                                                     'created_at',
-                                                     'updated_at')
+                                                     'created_at')
         end
 
         it 'returns correct data' do
           expect(data['data'].first['id']).to eq(@list.id)
           expect(data['data'].first['title']).to eq(@list.title)
           expect(data['data'].first['description']).to eq(@list.description)
-          expect(data['data'].first['state']).to eq(@list.state)
-          expect(data['data'].first['user_id']).to eq(@list.user_id)
         end
       end
 
@@ -184,18 +179,13 @@ RSpec.describe ListsController, type: :controller do
           expect(data.keys).to include('id',
                                        'title',
                                        'description',
-                                       'state',
-                                       'user_id',
-                                       'created_at',
-                                       'updated_at')
+                                       'created_at')
         end
 
         it 'returns correct data' do
           expect(data['id']).to eq(@list.id)
           expect(data['title']).to eq(@list.title)
           expect(data['description']).to eq(@list.description)
-          expect(data['state']).to eq(@list.state)
-          expect(data['user_id']).to eq(@list.user_id)
         end
       end
 
