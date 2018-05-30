@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include RailsJwtAuth::Authenticatable
   has_many :lists
   has_many :items
+  has_many :votes
 
   validates :name, presence: true, length: {maximum: 100}
   validates :password, confirmation: true

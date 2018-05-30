@@ -6,11 +6,13 @@ class ItemsController < ApplicationController
   def index
     # @items = Item.all
     @items = List.find(params[:list_id]).items.all.select('id', 'name', 'price', 'list_id', 'user_id', 'created_at')
+
     orderly
 
     @items = @items.order(@sort => @sort_order)
 
-    render json: {'data' => @items}
+    # render json: {'data' => @items}
+    render json: {'data' => @items.as_json(include: :votes)}
   end
 
   # POST /items

@@ -33,8 +33,7 @@ RSpec.describe Item, type: :model do
         expect(@item).not_to be_valid
       end
       it 'title repeat' do
-        # TODO
-        # expect(FactoryBot.create(:item, name: @item.name)).not_to be_valid
+        expect(FactoryBot.build(:item, name: @item.name)).not_to be_valid
       end
     end
     context 'when price is not valid' do
@@ -45,7 +44,7 @@ RSpec.describe Item, type: :model do
       end
       it 'price dont number' do
         expect(@item).to be_valid
-        @item.price = "no soy un numero"
+        @item.price = 'no soy un numero'
         expect(@item).not_to be_valid
       end
     end

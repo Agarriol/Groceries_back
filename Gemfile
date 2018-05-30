@@ -28,7 +28,7 @@ gem 'rack-cors'
 gem 'jsonapi-rails'
 gem 'pundit'
 gem 'rails_jwt_auth'
-#Para la paginación
+# Para la paginación
 gem 'kaminari'
 
 group :development, :test do
