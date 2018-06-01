@@ -2,21 +2,6 @@ class VotesController < ApplicationController
   before_action :set_vote, only: %i[show destroy]
   before_action :authenticate!
 
-  # GET /votes
-  def index
-    # @votes = Vote.all
-    @vote_index = Vote.find_by(user_id: current_user, item_id: params[:item_id])
-    
-    render json: @vote_index
-  end
-
-  # GET /votes/1
-  def show
-    @vote_show = Vote.find_by(user_id: current_user, item_id: params[:item_id])
-
-    render json: @vote_show
-  end
-
   # POST /votes
   def create
     # @vote = Vote.new(vote_params)

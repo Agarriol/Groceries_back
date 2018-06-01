@@ -16,6 +16,7 @@ RSpec.describe ItemsController, type: :controller do
 
     @item = create(:item)
     @item2 = create(:item)
+    @item3 = create(:item, list_id: 2)
   end
 
   describe 'GET #index' do
@@ -108,6 +109,21 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context 'when user is logged' do
+      context 'when list is closed' do
+        before do
+          sign_in @user
+          post :create, params: {list_id: @list2.id, id: @item3.id, item: item_attributes}
+        end
+
+        it 'returns 403 Http status code' do
+          expect(response).to have_http_status(403)
+        end
+
+        it 'dont create item' do
+          expect { post :create, params: {list_id: @list2.id, id: @item3.id, item: item_attributes} }.to change(Item, :count).by(0)
+        end
+      end
+
       context 'with correct params' do
         before do
           sign_in @user
@@ -194,6 +210,21 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context 'when user is logged' do
+      context 'when list is closed' do
+        before do
+          sign_in @user
+          put :update, params: {list_id: @list2.id, id: @item3.id, item: item_attributes}
+        end
+
+        it 'returns 403 Http status code' do
+          expect(response).to have_http_status(403)
+        end
+
+        it 'dont update item' do
+          expect(@item3['name']).not_to eq(item_attributes['name'])
+        end
+      end
+
       context 'with correct params' do
         before do
           sign_in @user
@@ -282,6 +313,21 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context 'when user is logged' do
+      context 'when list is closed' do
+        before do
+          sign_in @user
+          delete :destroy, params: {list_id: @list2.id, id: @item3.id}
+        end
+
+        it 'returns 403 Http status code' do
+          expect(response).to have_http_status(403)
+        end
+
+        it 'dont delete item' do
+          expect { delete :destroy, params: {list_id: @list2.id, id: @item3.id} }.to change(Item, :count).by(0)
+        end
+      end
+
       context 'with correct params' do
         before do
           sign_in @user

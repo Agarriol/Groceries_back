@@ -9,16 +9,27 @@ class ItemsController < ApplicationController
 
     orderly
 
-    @items = @items.order(@sort => @sort_order)
+    @page = params[:page] || {} if defined?(params[:page])
 
-    # render json: {'data' => @items}
-    render json: {'data' => @items.as_json(include: :votes)}
+    @items = @items.order(@sort => @sort_order)
+                   .page(@page[:number] || 1)
+                   .per(@page[:size] || 10)
+
+    render json: {'data' => @items.as_json(include: :votes),
+                  'meta' => {
+                    'current_page' => @items.current_page,
+                    'total_pages' => @items.total_pages,
+                    'page_size' => @items.size,
+                    'total_elements' => @items.total_count
+                  }}
   end
 
   # POST /items
   def create
     @item = List.find(params[:list_id]).items.new(item_params)
     @item.user = current_user
+
+    authorize @item
 
     if @item.save
 
@@ -48,6 +59,12 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   def destroy
     authorize @item
+
+    @item.votes.each(&:destroy)
+    # @item.votes.each do |p|
+    #   p.destroy
+    # end
+
     @item.destroy
   end
 

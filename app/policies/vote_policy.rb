@@ -8,10 +8,16 @@ class VotePolicy < ApplicationPolicy
 
   def create?
     @permit = @user.id == @vote.user_id
+    @permit = false if @vote.item.list.state == false
+
+    @permit
   end
 
   def destroy?
     @permit = @user.id == @vote.user_id
+    @permit = false if @vote.item.list.state == false
+
+    @permit
   end
 
   class Scope < Scope

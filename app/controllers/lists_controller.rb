@@ -4,7 +4,7 @@ class ListsController < ApplicationController
 
   # GET /lists
   def index
-    @lists = List.all.select('id', 'title', 'description','user_id', 'created_at')
+    @lists = List.all.select('id', 'title', 'description', 'user_id', 'state', 'created_at')
 
     filter if params[:filter] # TODO, ¿por qué no defined?()
     orderly
@@ -25,7 +25,7 @@ class ListsController < ApplicationController
 
   # GET /lists/1
   def show
-    @list_show = List.select('id', 'title', 'description', 'user_id', 'created_at').find(params[:id])
+    @list_show = List.select('id', 'title', 'description', 'user_id', 'state', 'created_at').find(params[:id])
 
     render json: @list_show
   end
@@ -56,6 +56,13 @@ class ListsController < ApplicationController
   # DELETE /lists/1
   def destroy
     authorize @list
+
+    # Al borrar una lista se borran los votos y items de la lista
+    @list.items.each do |p|
+      p.votes.each(&:destroy)
+      p.destroy
+    end
+
     @list.destroy
   end
 
