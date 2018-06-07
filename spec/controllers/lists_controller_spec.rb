@@ -102,6 +102,16 @@ RSpec.describe ListsController, type: :controller do
             expect(data['data'].map { |x| x['id'] }).to include(@list.id)
           end
         end
+
+        describe 'description' do
+          before do
+            get :index, params: {filter: {title: @list.title, description: @list2.description}}
+          end
+
+          it 'returns filtered resources' do
+            expect(data['data'].size).to eq(0)
+          end
+        end
       end
 
       describe 'order' do
@@ -256,7 +266,7 @@ RSpec.describe ListsController, type: :controller do
         end
 
         it 'body has an ActiveModel error' do
-          expect(data).to eq("title"=>["can't be blank"])
+          expect(data).to eq("title"=>[{"error"=>"blank"}])
         end
       end
     end
@@ -314,8 +324,10 @@ RSpec.describe ListsController, type: :controller do
           expect(response).to have_http_status(403)
         end
 
-        it 'dont update list' do
-          expect(@list['title']).not_to eq(list_attributes['title'])
+        it 'do not update list' do
+          @list_before_updated = @list
+          @list.reload
+          expect(@list).to eq(@list_before_updated)
         end
       end
 
@@ -330,11 +342,13 @@ RSpec.describe ListsController, type: :controller do
         end
 
         it 'body has an ActiveModel error' do
-          expect(data).to eq("title"=>["can't be blank"])
+          expect(data).to eq("title"=>[{"error"=>"blank"}])
         end
 
-        it 'dont update list' do
-          expect(@list['title']).not_to eq(list_attributes['title'])
+        it 'do not update list' do
+          @list_before_updated = @list
+          @list.reload
+          expect(@list).to eq(@list_before_updated)
         end
       end
     end

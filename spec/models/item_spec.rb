@@ -21,31 +21,32 @@ RSpec.describe Item, type: :model do
 
   describe 'Validations' do
     context 'when name is not valid' do
-      it 'name very long' do
-        @item.name = Faker::String.random(1..100)
-        expect(@item).to be_valid
+      it 'name very long (max. 100)' do
         @item.name = Faker::String.random(101)
         expect(@item).not_to be_valid
+        expect(@item.errors.details).to eq(name: [{error: :too_long, count: 100}])
       end
-      it 'title empty' do
-        expect(@item).to be_valid
+      it 'title can not be empty' do
         @item.name = nil
         expect(@item).not_to be_valid
+        expect(@item.errors.details).to eq(name: [{error: :blank}])
       end
-      it 'title repeat' do
-        expect(FactoryBot.build(:item, name: @item.name)).not_to be_valid
+      it 'title can not repeat' do
+        @item2 = FactoryBot.build(:item, name: @item.name)
+        expect(@item2).not_to be_valid
+        expect(@item2.errors.details).to eq(name: [{error: :taken, value: @item2.name}])
       end
     end
     context 'when price is not valid' do
-      it 'price empty' do
-        expect(@item).to be_valid
+      it 'price can not be empty' do
         @item.price = nil
         expect(@item).not_to be_valid
+        expect(@item.errors.details).to eq(price: [{error: :blank}])
       end
-      it 'price dont number' do
-        expect(@item).to be_valid
+      it 'price must be number' do
         @item.price = 'no soy un numero'
         expect(@item).not_to be_valid
+        expect(@item.errors.details).to eq(price: [{error: :not_a_number, value: 'no soy un numero'}])
       end
     end
   end

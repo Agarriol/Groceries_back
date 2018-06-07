@@ -4,17 +4,12 @@ class ListsController < ApplicationController
 
   # GET /lists
   def index
-    @lists = List.all.select('id', 'title', 'description', 'user_id', 'state', 'created_at')
+    @lists = List.all
+                 .filter(filter_params)
+                 .orderly(params, order_params)
+                 .paginate(params)
 
-    filter if params[:filter] # TODO, ¿por qué no defined?()
-    orderly
-    @page = params[:page] || {} if defined?(params[:page])
-
-    @lists = @lists.order(@sort => @sort_order)
-                   .page(@page[:number] || 1)
-                   .per(@page[:size] || 10)
-
-    render json: {'data' => @lists,
+    render json: {'data' => @lists.as_json(only: %i[id title description user_id state created_at]),
                   'meta' => {
                     'current_page' => @lists.current_page,
                     'total_pages' => @lists.total_pages,
@@ -25,9 +20,7 @@ class ListsController < ApplicationController
 
   # GET /lists/1
   def show
-    @list_show = List.select('id', 'title', 'description', 'user_id', 'state', 'created_at').find(params[:id])
-
-    render json: @list_show
+    render json: @list.as_json(only: %i[id title description user_id state created_at])
   end
 
   # POST /lists
@@ -39,7 +32,7 @@ class ListsController < ApplicationController
     if @list.save
       render json: @list, status: :created, location: @list
     else
-      render json: @list.errors, status: :unprocessable_entity
+      render json: @list.errors.details, status: :unprocessable_entity
     end
   end
 
@@ -49,19 +42,13 @@ class ListsController < ApplicationController
     if @list.update(list_params)
       head '204'
     else
-      render json: @list.errors, status: :unprocessable_entity
+      render json: @list.errors.details, status: :unprocessable_entity
     end
   end
 
   # DELETE /lists/1
   def destroy
     authorize @list
-
-    # Al borrar una lista se borran los votos y items de la lista
-    @list.items.each do |p|
-      p.votes.each(&:destroy)
-      p.destroy
-    end
 
     @list.destroy
   end
@@ -78,30 +65,13 @@ class ListsController < ApplicationController
     params.require(:list).permit(:title, :description, :state, :user_id)
   end
 
-  # TODO, función paginación
-  # def paginate
-  #   page(params[:page][:number] || 1).per(params[:page][:size] || 10)
-  # end
-
-  def filter
-    @lists = @lists.where(title: params[:filter][:title]) if params[:filter][:title]
+  def order_params
+    %w[created_at title] # = ['created_at', 'title']
   end
 
-  def orderly
-    @sort = params[:sort] || 'id'
-
-    @sort_order = if @sort[0] == '-'
-                    :desc
-                  else
-                    :asc
-                  end
-
-    @sort = @sort.sub(/-/, '')
-
-    @sort = if ['title', 'created_at', 'id'].include? @sort # if @sort == 'title' || @sort == 'created_at' || @sort == 'id'
-              @sort
-            else
-              'id'
-            end
+  def filter_params
+    params[:filter]&.permit(:title, :description) || {}
+    # Otra opción: params[:filter]&.slice(:title, :description) || {}
+    # Es peor por qué puede lanzar un error  ActiveModel::ForbiddenAtributes (o eso dicen)
   end
 end

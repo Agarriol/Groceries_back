@@ -4,33 +4,24 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all.select('id', 'name', 'email', 'created_at', 'updated_at')
+    @users = User.all
 
-    render json: @users
+    render json: @users.as_json(only: %i[id name email created_at updated_at])
   end
 
   # GET /users/1
   def show
-    @user_show = User.select('id', 'name', 'email', 'created_at', 'updated_at').find(params[:id])
-    render json: @user_show
+    render json: @user.as_json(only: %i[id name email created_at updated_at])
   end
 
   # PATCH/PUT /users/1
   def update
     authorize @user
 
-    if update_params[:password]
-      if current_user.update_with_password(update_params)
-        render json: nil, status: '204'
-      else
-        render json: current_user.errors.details, status: :unprocessable_entity
-      end
+    if User.update_user_params(update_params, @user)
+      head '204'
     else
-      if @user.update_attributes(update_params)
-        render json: nil, status: '204'
-      else
-        render json: @user.errors.details, status: :unprocessable_entity
-      end
+      render json: @user.errors.details, status: :unprocessable_entity
     end
   end
 
@@ -39,11 +30,6 @@ class UsersController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
-  end
-
-  # Only allow a trusted parameter "white list" through.
-  def user_params
-    params.require(:user).permit(:name, :email, :password_digest, :auth_tokens)
   end
 
   def update_params

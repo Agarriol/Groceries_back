@@ -20,30 +20,22 @@ RSpec.describe List, type: :model do
 
   describe 'Validations' do
     context 'when title is not valid' do
-      it 'title very long' do
-        @list.title = Faker::String.random(1..100)
-        expect(@list).to be_valid
-        @list.title = Faker::String.random(101)
+      it 'title very long (max. 100 characters)' do
+        @list.title = 'm' * 101
         expect(@list).not_to be_valid
+        expect(@list.errors.details).to eq(title: [{error: :too_long, count: 100}])
       end
-      it 'title empty' do
-        expect(@list).to be_valid
+      it 'title can not be empty' do
         @list.title = nil
         expect(@list).not_to be_valid
+        expect(@list.errors.details).to eq(title: [{error: :blank}])
       end
     end
     context 'when description is not valid' do
-      it 'description very long' do
-        @list.description = Faker::String.random(1..5000)
-        expect(@list).to be_valid
-        @list.description = Faker::String.random(5001)
+      it 'description very long (max. 5000 characters)' do
+        @list.description = 'm' * 5001
         expect(@list).not_to be_valid
-      end
-    end
-    context 'when state is not valid' do
-      it 'state very long' do
-        # este... sea como sea siempre esa bien. 
-        # Si se mete false es false y para cualquier otro valor es true
+        expect(@list.errors.details).to eq(description: [{error: :too_long, count: 5000}])
       end
     end
   end

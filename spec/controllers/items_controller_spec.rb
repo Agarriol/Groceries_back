@@ -119,7 +119,7 @@ RSpec.describe ItemsController, type: :controller do
           expect(response).to have_http_status(403)
         end
 
-        it 'dont create item' do
+        it 'do not create item' do
           expect { post :create, params: {list_id: @list2.id, id: @item3.id, item: item_attributes} }.to change(Item, :count).by(0)
         end
       end
@@ -161,7 +161,7 @@ RSpec.describe ItemsController, type: :controller do
           end
 
           it 'body has an ActiveModel error' do
-            expect(data).to eq("name"=>["can't be blank"], "price"=>["is not a number"])
+            expect(data).to eq("name"=>[{"error"=>"blank"}], "price"=>[{"error"=>"not_a_number", "value"=>item_attributes_bad_name[:price]}])
           end
         end
         context 'empty price' do
@@ -175,7 +175,7 @@ RSpec.describe ItemsController, type: :controller do
           end
 
           it 'body has an ActiveModel error' do
-            expect(data).to eq("price"=>["can't be blank", "is not a number"])
+            expect(data).to eq("price"=>[{"error"=>"blank"}])
           end
         end
 
@@ -186,7 +186,7 @@ RSpec.describe ItemsController, type: :controller do
           end
 
           it 'body has an ActiveModel error' do
-            expect(data).to eq("name"=>["has already been taken"])
+            expect(data).to eq("name"=>[{"error"=>"taken", "value"=>"item 52"}])
           end
         end
       end
@@ -220,12 +220,14 @@ RSpec.describe ItemsController, type: :controller do
           expect(response).to have_http_status(403)
         end
 
-        it 'dont update item' do
-          expect(@item3['name']).not_to eq(item_attributes['name'])
+        it 'do not update item' do
+          @item3_before_updated = @item3
+          @item3.reload
+          expect(@item3).to eq(@item3_before_updated)
         end
       end
 
-      context 'with correct params' do
+      context 'when list is open and update with correct params' do
         before do
           sign_in @user
           put :update, params: {list_id: 1, id: 1, item: item_attributes}
@@ -240,7 +242,7 @@ RSpec.describe ItemsController, type: :controller do
         end
       end
 
-      context 'when item dont exist' do
+      context 'when item do not exist' do
         before do
           sign_in @user
           put :update, params: {list_id: 1, id: 1984, item: item_attributes}
@@ -262,7 +264,9 @@ RSpec.describe ItemsController, type: :controller do
         end
 
         it 'dont update item' do
-          expect(@item['name']).not_to eq(item_attributes['name'])
+          @item_before_updated = @item
+          @item.reload
+          expect(@item).to eq(@item_before_updated)
         end
       end
 
@@ -278,11 +282,13 @@ RSpec.describe ItemsController, type: :controller do
           end
 
           it 'body has an ActiveModel error' do
-            expect(data).to eq("name"=>["can't be blank"], "price"=>["is not a number"])
+            expect(data).to eq("name"=>[{"error"=>"blank"}], "price"=>[{"error"=>"not_a_number", "value"=>item_attributes_bad_name[:price]}])
           end
 
-          it 'dont update list' do
-            expect(@item['name']).not_to eq(item_attributes_bad_name['name'])
+          it 'do not update list' do
+            @item_before_updated = @item
+            @item.reload
+            expect(@item).to eq(@item_before_updated)
           end
         end
 
@@ -293,7 +299,7 @@ RSpec.describe ItemsController, type: :controller do
           end
 
           it 'body has an ActiveModel error' do
-            expect(data).to eq("name"=>["has already been taken"])
+            expect(data).to eq("name"=>[{"error"=>"taken", "value"=>@item2.name}])
           end
         end
       end
@@ -323,7 +329,7 @@ RSpec.describe ItemsController, type: :controller do
           expect(response).to have_http_status(403)
         end
 
-        it 'dont delete item' do
+        it 'do not delete item' do
           expect { delete :destroy, params: {list_id: @list2.id, id: @item3.id} }.to change(Item, :count).by(0)
         end
       end
@@ -343,7 +349,7 @@ RSpec.describe ItemsController, type: :controller do
         end
       end
 
-      context 'when item dont exist' do
+      context 'when item do not exist' do
         before do
           sign_in @user
           delete :destroy, params: {list_id: 1, id: 1589}

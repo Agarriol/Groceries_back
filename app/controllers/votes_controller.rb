@@ -11,9 +11,9 @@ class VotesController < ApplicationController
     authorize @vote
 
     if @vote.save
-      render json: @vote, status: :created# , location: @vote
+      render json: @vote, status: :created # , location: @vote
     else
-      render json: @vote.errors, status: :unprocessable_entity
+      render json: @vote.errors.details, status: :unprocessable_entity
     end
   end
 

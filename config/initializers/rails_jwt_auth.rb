@@ -3,7 +3,7 @@ RailsJwtAuth.setup do |config|
   #config.model_name = 'User'
 
   # field name used to authentication with password
-  #config.auth_field_name = 'email'
+  config.auth_field_name = 'email'
 
   # set to true to validate auth_field email format
   #config.auth_field_email = true

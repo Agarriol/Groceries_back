@@ -29,8 +29,9 @@ RSpec.describe Item, type: :model do
         @vote1 = FactoryBot.build(:vote)
       end
 
-      it '' do
+      it 'can not be repeat' do
         expect(@vote1).not_to be_valid
+        expect(@vote1.errors.details).to eq(item_id: [{error: :taken, value: @vote1.item_id}])
       end
     end
   end

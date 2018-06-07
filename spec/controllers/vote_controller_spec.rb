@@ -87,10 +87,9 @@ RSpec.describe VotesController, type: :controller do
           end
 
           it 'body has an ActiveModel error' do
-            expect(data).to eq("item_id"=>["has already been taken"])
+            expect(data).to eq("item_id"=>[{"error"=>"taken", "value"=>1}])
           end
         end
-
       end
     end
   end

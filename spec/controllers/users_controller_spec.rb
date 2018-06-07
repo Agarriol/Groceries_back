@@ -42,7 +42,13 @@ RSpec.describe UsersController, type: :controller do
                                             'email',
                                             'created_at',
                                             'updated_at')
-                                            require 'rails_helper'  end
+      end
+
+      it 'returns correct data' do
+        expect(@data.first['id']).to eq(@user.id)
+        expect(@data.first['name']).to eq(@user.name)
+        expect(@data.first['email']).to eq(@user.email)
+      end
     end
   end
 
@@ -61,12 +67,7 @@ RSpec.describe UsersController, type: :controller do
         it 'returns 200 Http status code if user exist' do
           expect(response).to have_http_status(200)
         end
-=begin
-        it 'returns all resources' do
-          puts @data
-          expect(@data.size).to eq 1
-        end
-=end
+
         it 'returns correct info' do
           expect(@data.keys).to include('id',
                                         'name',
@@ -76,6 +77,12 @@ RSpec.describe UsersController, type: :controller do
           expect(@data.keys).not_to include('password_digest',
                                             'auth_tokens')
           expect(@data.keys.size).to eq(5)
+        end
+
+        it 'returns correct data' do
+          expect(@data['id']).to eq(@user.id)
+          expect(@data['name']).to eq(@user.name)
+          expect(@data['email']).to eq(@user.email)
         end
       end
 
@@ -94,6 +101,7 @@ RSpec.describe UsersController, type: :controller do
   describe 'UPDATE #update' do
     let(:attributes) { {name: 'unnombre'} }
     let(:bad_attributes) { {email: ''} }
+    # let(:user_before_update) { @user2 }
 
     context 'when user is logged and have licence' do
       before do
@@ -106,11 +114,13 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it 'returns all resources' do
-        expect(response.body).to eq 'null'
+        expect(response.body).to be_empty
       end
 
       it 'updates the resource' do
         @user2.reload
+        # ¿Por qué son iguales, se actualiza user_before_update?
+        # expect(@user2).not_to eq(user_before_update)
 
         attributes.each do |field, value|
           expect(@user2.send(field)).to eq(value)
@@ -169,9 +179,7 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it 'response ActiveModel error type' do
-        # No puede ser una condición genérica, 
-        # ya que el test es como un cliente que llama a la api
-        expect(@data).to eq({"email"=>[{"error"=>"blank"}, {"error"=>"invalid", "value"=>""}]})
+        expect(@data).to eq("email"=>[{"error"=>"blank"}])
       end
     end
   end
